@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package authsvc;
 
-option go_package = "./pkg/services/auth-svc/pb";
+option go_package = "./auth/pb";
 
 service AuthService{
     rpc Signup(SignUpReq)returns(Responce){}
