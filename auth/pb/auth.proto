@@ -6,6 +6,11 @@ option go_package = "./auth/pb";
 
 service AuthService{
     rpc Signup(SignUpReq)returns(Responce){}
+    rpc SendOtp(OtpReq)returns(Responce){}
+}
+
+message OtpReq{
+    int64 phone=1;
 }
 
 message SignUpReq{

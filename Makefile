@@ -1,2 +1,2 @@
 genauth:
-	protoc --go_out=. --go-grpc_out=. --proto_path=./auth auth.proto
+	protoc --go_out=. --go-grpc_out=. --proto_path=./auth/pb auth.proto
