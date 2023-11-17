@@ -10,7 +10,7 @@ service AuthService{
 }
 
 message OtpReq{
-    int64 phone=1;
+    string phone=1;
 }
 
 message SignUpReq{
