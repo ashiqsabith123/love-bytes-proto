@@ -18,6 +18,7 @@ message SignUpReq{
     int64  phone =2;
     string username =3;
     string password =4;
+    string otp=5;
 }
 
 message Responce{
