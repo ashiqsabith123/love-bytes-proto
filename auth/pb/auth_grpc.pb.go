@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
-	Signup(ctx context.Context, in *OtpSignUpReq, opts ...grpc.CallOption) (*Responce, error)
+	VerifyOtpAndSignup(ctx context.Context, in *OtpSignUpReq, opts ...grpc.CallOption) (*Responce, error)
 	SendOtp(ctx context.Context, in *OtpReq, opts ...grpc.CallOption) (*Responce, error)
 }
 
@@ -34,9 +34,9 @@ func NewAuthServiceClient(cc grpc.ClientConnInterface) AuthServiceClient {
 	return &authServiceClient{cc}
 }
 
-func (c *authServiceClient) Signup(ctx context.Context, in *OtpSignUpReq, opts ...grpc.CallOption) (*Responce, error) {
+func (c *authServiceClient) VerifyOtpAndSignup(ctx context.Context, in *OtpSignUpReq, opts ...grpc.CallOption) (*Responce, error) {
 	out := new(Responce)
-	err := c.cc.Invoke(ctx, "/authsvc.AuthService/Signup", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/authsvc.AuthService/VerifyOtpAndSignup", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *authServiceClient) SendOtp(ctx context.Context, in *OtpReq, opts ...grp
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
 type AuthServiceServer interface {
-	Signup(context.Context, *OtpSignUpReq) (*Responce, error)
+	VerifyOtpAndSignup(context.Context, *OtpSignUpReq) (*Responce, error)
 	SendOtp(context.Context, *OtpReq) (*Responce, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
@@ -65,8 +65,8 @@ type AuthServiceServer interface {
 type UnimplementedAuthServiceServer struct {
 }
 
-func (UnimplementedAuthServiceServer) Signup(context.Context, *OtpSignUpReq) (*Responce, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Signup not implemented")
+func (UnimplementedAuthServiceServer) VerifyOtpAndSignup(context.Context, *OtpSignUpReq) (*Responce, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyOtpAndSignup not implemented")
 }
 func (UnimplementedAuthServiceServer) SendOtp(context.Context, *OtpReq) (*Responce, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendOtp not implemented")
@@ -84,20 +84,20 @@ func RegisterAuthServiceServer(s grpc.ServiceRegistrar, srv AuthServiceServer) {
 	s.RegisterService(&AuthService_ServiceDesc, srv)
 }
 
-func _AuthService_Signup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AuthService_VerifyOtpAndSignup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(OtpSignUpReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).Signup(ctx, in)
+		return srv.(AuthServiceServer).VerifyOtpAndSignup(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/authsvc.AuthService/Signup",
+		FullMethod: "/authsvc.AuthService/VerifyOtpAndSignup",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).Signup(ctx, req.(*OtpSignUpReq))
+		return srv.(AuthServiceServer).VerifyOtpAndSignup(ctx, req.(*OtpSignUpReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Signup",
-			Handler:    _AuthService_Signup_Handler,
+			MethodName: "VerifyOtpAndSignup",
+			Handler:    _AuthService_VerifyOtpAndSignup_Handler,
 		},
 		{
 			MethodName: "SendOtp",

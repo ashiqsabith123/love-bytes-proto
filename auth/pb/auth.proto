@@ -5,7 +5,7 @@ package authsvc;
 option go_package = "./auth/pb";
 
 service AuthService{
-    rpc Signup(OtpSignUpReq)returns(Responce){}
+    rpc VerifyOtpAndSignup(OtpSignUpReq)returns(Responce){}
     rpc SendOtp(OtpReq)returns(Responce){}
 }
 
@@ -15,7 +15,7 @@ message OtpReq{
 
 message OtpSignUpReq{
     string fullname =1;
-    int64  phone =2;
+    string  phone =2;
     string username =3;
     string password =4;
     string otp=5;
