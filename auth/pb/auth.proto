@@ -15,6 +15,11 @@ message OtpReq{
     string phone=1;
 }
 
+message TokenResp{
+    bool userFound =1;
+    string token=2;
+}
+
 message VerifyOtpReq{
     string  phone =1;
     string otp=2;
