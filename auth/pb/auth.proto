@@ -2,27 +2,27 @@ syntax = "proto3";
 
 package authsvc;
 
+import "google/protobuf/any.proto";
+
 option go_package = "./auth/pb";
 
 service AuthService{
-    rpc VerifyOtpAndSignup(OtpSignUpReq)returns(Responce){}
-    rpc SendOtp(OtpReq)returns(Responce){}
+    rpc VerifyOtpAndAuth(VerifyOtpReq)returns(Response){}
+    rpc SendOtp(OtpReq)returns(Response){}
 }
 
 message OtpReq{
     string phone=1;
 }
 
-message OtpSignUpReq{
-    string fullname =1;
-    string  phone =2;
-    string username =3;
-    string password =4;
-    string otp=5;
+message VerifyOtpReq{
+    string  phone =1;
+    string otp=2;
 }
 
-message Responce{
-    int32  code =1;
-    string message =2;
-    string error =3;
+message Response {
+    int32 code = 1;
+    string message = 2;
+    google.protobuf.Any error = 3; // Use google.protobuf.Any for interface{} in Go
+    google.protobuf.Any data = 4; // Use google.protobuf.Any for interface{} in Go
 }
