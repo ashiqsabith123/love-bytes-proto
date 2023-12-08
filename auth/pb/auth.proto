@@ -16,7 +16,7 @@ message OtpReq{
 }
 
 message TokenResp{
-    bool userFound =1;
+    bool userfound =1;
     string token=2;
 }
 
