@@ -27,11 +27,12 @@ message VerifyOtpReq{
 }
 
 message UserDetailsReq{
-    string fullname =1;
-    string email =2;
-    string location =3;
-    string dateofbirth =4;
-    string gender =5;
+    int32 id =1;
+    string fullname =2;
+    string email =3;
+    string location =4;
+    string dateofbirth =5;
+    string gender =6;
 }
 
 message Response {
