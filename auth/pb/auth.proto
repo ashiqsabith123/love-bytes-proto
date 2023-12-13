@@ -1,28 +1,37 @@
 syntax = "proto3";
 
-package authsvc;
 
 import "google/protobuf/any.proto";
 
 option go_package = "./auth/pb";
-
-service AuthService{
-    rpc VerifyOtpAndAuth(VerifyOtpReq)returns(Response){}
-    rpc SendOtp(OtpReq)returns(Response){}
-}
-
-message OtpReq{
-    string phone=1;
-}
 
 message TokenResp{
     bool userfound =1;
     string token=2;
 }
 
+service AuthService{
+    rpc SendOtp(OtpReq)returns(Response){}
+    rpc VerifyOtpAndAuth(VerifyOtpReq)returns(Response){}
+    rpc SaveUserDetais(UserDetailsReq)returns(Response){}
+   
+}
+
+message OtpReq{
+    string phone=1;
+}
+
 message VerifyOtpReq{
     string  phone =1;
     string otp=2;
+}
+
+message UserDetailsReq{
+    string fullname =1;
+    string email =2;
+    string location =3;
+    string dateofbirth =4;
+    string gender =5;
 }
 
 message Response {

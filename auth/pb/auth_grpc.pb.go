@@ -22,8 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
-	VerifyOtpAndAuth(ctx context.Context, in *VerifyOtpReq, opts ...grpc.CallOption) (*Response, error)
 	SendOtp(ctx context.Context, in *OtpReq, opts ...grpc.CallOption) (*Response, error)
+	VerifyOtpAndAuth(ctx context.Context, in *VerifyOtpReq, opts ...grpc.CallOption) (*Response, error)
+	SaveUserDetais(ctx context.Context, in *UserDetailsReq, opts ...grpc.CallOption) (*Response, error)
 }
 
 type authServiceClient struct {
@@ -34,18 +35,27 @@ func NewAuthServiceClient(cc grpc.ClientConnInterface) AuthServiceClient {
 	return &authServiceClient{cc}
 }
 
-func (c *authServiceClient) VerifyOtpAndAuth(ctx context.Context, in *VerifyOtpReq, opts ...grpc.CallOption) (*Response, error) {
+func (c *authServiceClient) SendOtp(ctx context.Context, in *OtpReq, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/authsvc.AuthService/VerifyOtpAndAuth", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/AuthService/SendOtp", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authServiceClient) SendOtp(ctx context.Context, in *OtpReq, opts ...grpc.CallOption) (*Response, error) {
+func (c *authServiceClient) VerifyOtpAndAuth(ctx context.Context, in *VerifyOtpReq, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/authsvc.AuthService/SendOtp", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/AuthService/VerifyOtpAndAuth", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) SaveUserDetais(ctx context.Context, in *UserDetailsReq, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/AuthService/SaveUserDetais", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +66,9 @@ func (c *authServiceClient) SendOtp(ctx context.Context, in *OtpReq, opts ...grp
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
 type AuthServiceServer interface {
-	VerifyOtpAndAuth(context.Context, *VerifyOtpReq) (*Response, error)
 	SendOtp(context.Context, *OtpReq) (*Response, error)
+	VerifyOtpAndAuth(context.Context, *VerifyOtpReq) (*Response, error)
+	SaveUserDetais(context.Context, *UserDetailsReq) (*Response, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -65,11 +76,14 @@ type AuthServiceServer interface {
 type UnimplementedAuthServiceServer struct {
 }
 
+func (UnimplementedAuthServiceServer) SendOtp(context.Context, *OtpReq) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendOtp not implemented")
+}
 func (UnimplementedAuthServiceServer) VerifyOtpAndAuth(context.Context, *VerifyOtpReq) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyOtpAndAuth not implemented")
 }
-func (UnimplementedAuthServiceServer) SendOtp(context.Context, *OtpReq) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendOtp not implemented")
+func (UnimplementedAuthServiceServer) SaveUserDetais(context.Context, *UserDetailsReq) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveUserDetais not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -84,24 +98,6 @@ func RegisterAuthServiceServer(s grpc.ServiceRegistrar, srv AuthServiceServer) {
 	s.RegisterService(&AuthService_ServiceDesc, srv)
 }
 
-func _AuthService_VerifyOtpAndAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(VerifyOtpReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServiceServer).VerifyOtpAndAuth(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/authsvc.AuthService/VerifyOtpAndAuth",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).VerifyOtpAndAuth(ctx, req.(*VerifyOtpReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _AuthService_SendOtp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(OtpReq)
 	if err := dec(in); err != nil {
@@ -112,10 +108,46 @@ func _AuthService_SendOtp_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/authsvc.AuthService/SendOtp",
+		FullMethod: "/AuthService/SendOtp",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).SendOtp(ctx, req.(*OtpReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_VerifyOtpAndAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyOtpReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).VerifyOtpAndAuth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/AuthService/VerifyOtpAndAuth",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).VerifyOtpAndAuth(ctx, req.(*VerifyOtpReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_SaveUserDetais_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserDetailsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).SaveUserDetais(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/AuthService/SaveUserDetais",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).SaveUserDetais(ctx, req.(*UserDetailsReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -124,16 +156,20 @@ func _AuthService_SendOtp_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var AuthService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "authsvc.AuthService",
+	ServiceName: "AuthService",
 	HandlerType: (*AuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "SendOtp",
+			Handler:    _AuthService_SendOtp_Handler,
+		},
 		{
 			MethodName: "VerifyOtpAndAuth",
 			Handler:    _AuthService_VerifyOtpAndAuth_Handler,
 		},
 		{
-			MethodName: "SendOtp",
-			Handler:    _AuthService_SendOtp_Handler,
+			MethodName: "SaveUserDetais",
+			Handler:    _AuthService_SaveUserDetais_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
