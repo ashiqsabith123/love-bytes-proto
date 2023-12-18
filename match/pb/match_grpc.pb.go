@@ -48,7 +48,7 @@ func (c *matchServiceClient) UplaodPhotos(ctx context.Context, opts ...grpc.Call
 
 type MatchService_UplaodPhotosClient interface {
 	Send(*PhotoRequest) error
-	CloseAndRecv() (*Response, error)
+	CloseAndRecv() (*MatchResponse, error)
 	grpc.ClientStream
 }
 
@@ -60,11 +60,11 @@ func (x *matchServiceUplaodPhotosClient) Send(m *PhotoRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *matchServiceUplaodPhotosClient) CloseAndRecv() (*Response, error) {
+func (x *matchServiceUplaodPhotosClient) CloseAndRecv() (*MatchResponse, error) {
 	if err := x.ClientStream.CloseSend(); err != nil {
 		return nil, err
 	}
-	m := new(Response)
+	m := new(MatchResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func _MatchService_UplaodPhotos_Handler(srv interface{}, stream grpc.ServerStrea
 }
 
 type MatchService_UplaodPhotosServer interface {
-	SendAndClose(*Response) error
+	SendAndClose(*MatchResponse) error
 	Recv() (*PhotoRequest, error)
 	grpc.ServerStream
 }
@@ -113,7 +113,7 @@ type matchServiceUplaodPhotosServer struct {
 	grpc.ServerStream
 }
 
-func (x *matchServiceUplaodPhotosServer) SendAndClose(m *Response) error {
+func (x *matchServiceUplaodPhotosServer) SendAndClose(m *MatchResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
