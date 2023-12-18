@@ -12,6 +12,7 @@ service MatchService {
 message PhotoRequest{
     int32 userID =1;
     bytes imageData =2;
+    bool lastChunk =3;
 }
 
 
