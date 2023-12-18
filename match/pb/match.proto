@@ -5,7 +5,7 @@ import "google/protobuf/any.proto";
 option go_package = "./match/pb";
 
 service MatchService {
-   rpc UplaodPhotos(stream PhotoRequest)returns(Response){}
+   rpc UplaodPhotos(stream PhotoRequest)returns(MatchResponse){}
 }
 
 
@@ -15,7 +15,7 @@ message PhotoRequest{
 }
 
 
-message Response {
+message MatchResponse {
     int32 code = 1;
     string message = 2;
     google.protobuf.Any error = 3; // Use google.protobuf.Any for interface{} in Go
