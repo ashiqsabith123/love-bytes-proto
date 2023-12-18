@@ -7,7 +7,10 @@
 package pb
 
 import (
+	context "context"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -15,12 +18,15 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-const ()
+const (
+	MatchService_UplaodPhotos_FullMethodName = "/MatchService/UplaodPhotos"
+)
 
 // MatchServiceClient is the client API for MatchService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MatchServiceClient interface {
+	UplaodPhotos(ctx context.Context, opts ...grpc.CallOption) (MatchService_UplaodPhotosClient, error)
 }
 
 type matchServiceClient struct {
@@ -31,10 +37,45 @@ func NewMatchServiceClient(cc grpc.ClientConnInterface) MatchServiceClient {
 	return &matchServiceClient{cc}
 }
 
+func (c *matchServiceClient) UplaodPhotos(ctx context.Context, opts ...grpc.CallOption) (MatchService_UplaodPhotosClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MatchService_ServiceDesc.Streams[0], MatchService_UplaodPhotos_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &matchServiceUplaodPhotosClient{stream}
+	return x, nil
+}
+
+type MatchService_UplaodPhotosClient interface {
+	Send(*PhotoRequest) error
+	CloseAndRecv() (*Response, error)
+	grpc.ClientStream
+}
+
+type matchServiceUplaodPhotosClient struct {
+	grpc.ClientStream
+}
+
+func (x *matchServiceUplaodPhotosClient) Send(m *PhotoRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *matchServiceUplaodPhotosClient) CloseAndRecv() (*Response, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(Response)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // MatchServiceServer is the server API for MatchService service.
 // All implementations must embed UnimplementedMatchServiceServer
 // for forward compatibility
 type MatchServiceServer interface {
+	UplaodPhotos(MatchService_UplaodPhotosServer) error
 	mustEmbedUnimplementedMatchServiceServer()
 }
 
@@ -42,6 +83,9 @@ type MatchServiceServer interface {
 type UnimplementedMatchServiceServer struct {
 }
 
+func (UnimplementedMatchServiceServer) UplaodPhotos(MatchService_UplaodPhotosServer) error {
+	return status.Errorf(codes.Unimplemented, "method UplaodPhotos not implemented")
+}
 func (UnimplementedMatchServiceServer) mustEmbedUnimplementedMatchServiceServer() {}
 
 // UnsafeMatchServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -55,6 +99,32 @@ func RegisterMatchServiceServer(s grpc.ServiceRegistrar, srv MatchServiceServer)
 	s.RegisterService(&MatchService_ServiceDesc, srv)
 }
 
+func _MatchService_UplaodPhotos_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(MatchServiceServer).UplaodPhotos(&matchServiceUplaodPhotosServer{stream})
+}
+
+type MatchService_UplaodPhotosServer interface {
+	SendAndClose(*Response) error
+	Recv() (*PhotoRequest, error)
+	grpc.ServerStream
+}
+
+type matchServiceUplaodPhotosServer struct {
+	grpc.ServerStream
+}
+
+func (x *matchServiceUplaodPhotosServer) SendAndClose(m *Response) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *matchServiceUplaodPhotosServer) Recv() (*PhotoRequest, error) {
+	m := new(PhotoRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // MatchService_ServiceDesc is the grpc.ServiceDesc for MatchService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -62,6 +132,12 @@ var MatchService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "MatchService",
 	HandlerType: (*MatchServiceServer)(nil),
 	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "match.proto",
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "UplaodPhotos",
+			Handler:       _MatchService_UplaodPhotos_Handler,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "match.proto",
 }
