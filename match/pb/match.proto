@@ -6,6 +6,7 @@ option go_package = "./match/pb";
 
 service MatchService {
    rpc UplaodPhotos(stream PhotoRequest)returns(MatchResponse){}
+   rpc SaveUserPredrences(UserPrefrencesRequest)returns(MatchResponse){}
 }
 
 
@@ -15,6 +16,19 @@ message PhotoRequest{
     bool lastChunk =3;
 }
 
+message UserPrefrencesRequest{
+   int32 userID =1;
+   string height =2;
+   string maritalstatus =3;
+   string faith =4;
+   string motherTounge =5;
+   string smokeStatus =6;
+   string alcoholStatus =7;
+   string settleStatus =8;
+   string hobbies =9;
+   string teaPerson =10;
+   string loveLanguage =11;
+}
 
 message MatchResponse {
     int32 code = 1;

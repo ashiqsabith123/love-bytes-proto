@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MatchService_UplaodPhotos_FullMethodName = "/MatchService/UplaodPhotos"
+	MatchService_UplaodPhotos_FullMethodName       = "/MatchService/UplaodPhotos"
+	MatchService_SaveUserPredrences_FullMethodName = "/MatchService/SaveUserPredrences"
 )
 
 // MatchServiceClient is the client API for MatchService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MatchServiceClient interface {
 	UplaodPhotos(ctx context.Context, opts ...grpc.CallOption) (MatchService_UplaodPhotosClient, error)
+	SaveUserPredrences(ctx context.Context, in *UserPrefrencesRequest, opts ...grpc.CallOption) (*MatchResponse, error)
 }
 
 type matchServiceClient struct {
@@ -71,11 +73,21 @@ func (x *matchServiceUplaodPhotosClient) CloseAndRecv() (*MatchResponse, error) 
 	return m, nil
 }
 
+func (c *matchServiceClient) SaveUserPredrences(ctx context.Context, in *UserPrefrencesRequest, opts ...grpc.CallOption) (*MatchResponse, error) {
+	out := new(MatchResponse)
+	err := c.cc.Invoke(ctx, MatchService_SaveUserPredrences_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MatchServiceServer is the server API for MatchService service.
 // All implementations must embed UnimplementedMatchServiceServer
 // for forward compatibility
 type MatchServiceServer interface {
 	UplaodPhotos(MatchService_UplaodPhotosServer) error
+	SaveUserPredrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error)
 	mustEmbedUnimplementedMatchServiceServer()
 }
 
@@ -85,6 +97,9 @@ type UnimplementedMatchServiceServer struct {
 
 func (UnimplementedMatchServiceServer) UplaodPhotos(MatchService_UplaodPhotosServer) error {
 	return status.Errorf(codes.Unimplemented, "method UplaodPhotos not implemented")
+}
+func (UnimplementedMatchServiceServer) SaveUserPredrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveUserPredrences not implemented")
 }
 func (UnimplementedMatchServiceServer) mustEmbedUnimplementedMatchServiceServer() {}
 
@@ -125,13 +140,36 @@ func (x *matchServiceUplaodPhotosServer) Recv() (*PhotoRequest, error) {
 	return m, nil
 }
 
+func _MatchService_SaveUserPredrences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserPrefrencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MatchServiceServer).SaveUserPredrences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MatchService_SaveUserPredrences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MatchServiceServer).SaveUserPredrences(ctx, req.(*UserPrefrencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MatchService_ServiceDesc is the grpc.ServiceDesc for MatchService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var MatchService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "MatchService",
 	HandlerType: (*MatchServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "SaveUserPredrences",
+			Handler:    _MatchService_SaveUserPredrences_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "UplaodPhotos",
