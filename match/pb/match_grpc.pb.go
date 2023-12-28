@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	MatchService_UplaodPhotos_FullMethodName       = "/MatchService/UplaodPhotos"
-	MatchService_SaveUserPredrences_FullMethodName = "/MatchService/SaveUserPredrences"
+	MatchService_SaveUserPrefrences_FullMethodName = "/MatchService/SaveUserPrefrences"
 )
 
 // MatchServiceClient is the client API for MatchService service.
@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MatchServiceClient interface {
 	UplaodPhotos(ctx context.Context, opts ...grpc.CallOption) (MatchService_UplaodPhotosClient, error)
-	SaveUserPredrences(ctx context.Context, in *UserPrefrencesRequest, opts ...grpc.CallOption) (*MatchResponse, error)
+	SaveUserPrefrences(ctx context.Context, in *UserPrefrencesRequest, opts ...grpc.CallOption) (*MatchResponse, error)
 }
 
 type matchServiceClient struct {
@@ -73,9 +73,9 @@ func (x *matchServiceUplaodPhotosClient) CloseAndRecv() (*MatchResponse, error) 
 	return m, nil
 }
 
-func (c *matchServiceClient) SaveUserPredrences(ctx context.Context, in *UserPrefrencesRequest, opts ...grpc.CallOption) (*MatchResponse, error) {
+func (c *matchServiceClient) SaveUserPrefrences(ctx context.Context, in *UserPrefrencesRequest, opts ...grpc.CallOption) (*MatchResponse, error) {
 	out := new(MatchResponse)
-	err := c.cc.Invoke(ctx, MatchService_SaveUserPredrences_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, MatchService_SaveUserPrefrences_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (c *matchServiceClient) SaveUserPredrences(ctx context.Context, in *UserPre
 // for forward compatibility
 type MatchServiceServer interface {
 	UplaodPhotos(MatchService_UplaodPhotosServer) error
-	SaveUserPredrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error)
+	SaveUserPrefrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error)
 	mustEmbedUnimplementedMatchServiceServer()
 }
 
@@ -98,8 +98,8 @@ type UnimplementedMatchServiceServer struct {
 func (UnimplementedMatchServiceServer) UplaodPhotos(MatchService_UplaodPhotosServer) error {
 	return status.Errorf(codes.Unimplemented, "method UplaodPhotos not implemented")
 }
-func (UnimplementedMatchServiceServer) SaveUserPredrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveUserPredrences not implemented")
+func (UnimplementedMatchServiceServer) SaveUserPrefrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveUserPrefrences not implemented")
 }
 func (UnimplementedMatchServiceServer) mustEmbedUnimplementedMatchServiceServer() {}
 
@@ -140,20 +140,20 @@ func (x *matchServiceUplaodPhotosServer) Recv() (*PhotoRequest, error) {
 	return m, nil
 }
 
-func _MatchService_SaveUserPredrences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _MatchService_SaveUserPrefrences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserPrefrencesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MatchServiceServer).SaveUserPredrences(ctx, in)
+		return srv.(MatchServiceServer).SaveUserPrefrences(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MatchService_SaveUserPredrences_FullMethodName,
+		FullMethod: MatchService_SaveUserPrefrences_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MatchServiceServer).SaveUserPredrences(ctx, req.(*UserPrefrencesRequest))
+		return srv.(MatchServiceServer).SaveUserPrefrences(ctx, req.(*UserPrefrencesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -166,8 +166,8 @@ var MatchService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MatchServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveUserPredrences",
-			Handler:    _MatchService_SaveUserPredrences_Handler,
+			MethodName: "SaveUserPrefrences",
+			Handler:    _MatchService_SaveUserPrefrences_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

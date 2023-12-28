@@ -17,9 +17,9 @@ message PhotoRequest{
 }
 
 message UserPrefrencesRequest{
-   int32 userID =1;
+   int32 userId =1;
    string height =2;
-   string maritalstatus =3;
+   string maritalStatus =3;
    string faith =4;
    string motherTounge =5;
    string smokeStatus =6;
