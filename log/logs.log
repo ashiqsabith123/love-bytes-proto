@@ -1,0 +1,13 @@
+General Logger:	2023/12/28 15:30:35 logger.go:21: 
+
+
+Application restarted ---------
+General Logger:	2023/12/28 15:30:35 database.go:28: Database connected succesfully....
+General Logger:	2023/12/28 15:30:35 main.go:80: Match Svc listening on :50052
+General Logger:	2023/12/28 16:21:13 logger.go:21: 
+
+
+Application restarted ---------
+General Logger:	2023/12/28 16:21:13 database.go:28: Database connected succesfully....
+General Logger:	2023/12/28 16:21:13 main.go:80: Match Svc listening on :50052
+General Logger:	2023/12/28 16:24:45 user.go:36: Photo upload succecsfully
