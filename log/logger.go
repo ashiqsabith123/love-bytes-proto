@@ -8,9 +8,9 @@ import (
 var GenLog *log.Logger
 var ErrLog *log.Logger
 
-func InitLogger() error {
+func InitLogger(filePath string) error {
 
-	generalLog, err := os.OpenFile("./pkg/log/logs.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	generalLog, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return err
 	}
