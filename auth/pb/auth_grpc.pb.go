@@ -22,6 +22,8 @@ const (
 	AuthService_SendOtp_FullMethodName          = "/AuthService/SendOtp"
 	AuthService_VerifyOtpAndAuth_FullMethodName = "/AuthService/VerifyOtpAndAuth"
 	AuthService_SaveUserDetais_FullMethodName   = "/AuthService/SaveUserDetais"
+	AuthService_GetUserByID_FullMethodName      = "/AuthService/GetUserByID"
+	AuthService_GetUsersByGender_FullMethodName = "/AuthService/GetUsersByGender"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -31,6 +33,8 @@ type AuthServiceClient interface {
 	SendOtp(ctx context.Context, in *OtpReq, opts ...grpc.CallOption) (*Response, error)
 	VerifyOtpAndAuth(ctx context.Context, in *VerifyOtpReq, opts ...grpc.CallOption) (*Response, error)
 	SaveUserDetais(ctx context.Context, in *UserDetailsReq, opts ...grpc.CallOption) (*Response, error)
+	GetUserByID(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*UserRepsonse, error)
+	GetUsersByGender(ctx context.Context, in *UserGenderRequest, opts ...grpc.CallOption) (*UserResponses, error)
 }
 
 type authServiceClient struct {
@@ -68,6 +72,24 @@ func (c *authServiceClient) SaveUserDetais(ctx context.Context, in *UserDetailsR
 	return out, nil
 }
 
+func (c *authServiceClient) GetUserByID(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*UserRepsonse, error) {
+	out := new(UserRepsonse)
+	err := c.cc.Invoke(ctx, AuthService_GetUserByID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) GetUsersByGender(ctx context.Context, in *UserGenderRequest, opts ...grpc.CallOption) (*UserResponses, error) {
+	out := new(UserResponses)
+	err := c.cc.Invoke(ctx, AuthService_GetUsersByGender_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
@@ -75,6 +97,8 @@ type AuthServiceServer interface {
 	SendOtp(context.Context, *OtpReq) (*Response, error)
 	VerifyOtpAndAuth(context.Context, *VerifyOtpReq) (*Response, error)
 	SaveUserDetais(context.Context, *UserDetailsReq) (*Response, error)
+	GetUserByID(context.Context, *UserIDRequest) (*UserRepsonse, error)
+	GetUsersByGender(context.Context, *UserGenderRequest) (*UserResponses, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -90,6 +114,12 @@ func (UnimplementedAuthServiceServer) VerifyOtpAndAuth(context.Context, *VerifyO
 }
 func (UnimplementedAuthServiceServer) SaveUserDetais(context.Context, *UserDetailsReq) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveUserDetais not implemented")
+}
+func (UnimplementedAuthServiceServer) GetUserByID(context.Context, *UserIDRequest) (*UserRepsonse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByID not implemented")
+}
+func (UnimplementedAuthServiceServer) GetUsersByGender(context.Context, *UserGenderRequest) (*UserResponses, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUsersByGender not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -158,6 +188,42 @@ func _AuthService_SaveUserDetais_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_GetUserByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetUserByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_GetUserByID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetUserByID(ctx, req.(*UserIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_GetUsersByGender_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserGenderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetUsersByGender(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_GetUsersByGender_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetUsersByGender(ctx, req.(*UserGenderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +242,14 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SaveUserDetais",
 			Handler:    _AuthService_SaveUserDetais_Handler,
+		},
+		{
+			MethodName: "GetUserByID",
+			Handler:    _AuthService_GetUserByID_Handler,
+		},
+		{
+			MethodName: "GetUsersByGender",
+			Handler:    _AuthService_GetUsersByGender_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
