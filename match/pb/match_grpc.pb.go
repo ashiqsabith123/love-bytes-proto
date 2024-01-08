@@ -21,8 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	MatchService_UplaodPhotos_FullMethodName       = "/MatchService/UplaodPhotos"
 	MatchService_SaveUserPrefrences_FullMethodName = "/MatchService/SaveUserPrefrences"
-	MatchService_GetUserByID_FullMethodName        = "/MatchService/GetUserByID"
-	MatchService_GetUsersByGender_FullMethodName   = "/MatchService/GetUsersByGender"
 	MatchService_GetMatchedUsers_FullMethodName    = "/MatchService/GetMatchedUsers"
 )
 
@@ -32,8 +30,6 @@ const (
 type MatchServiceClient interface {
 	UplaodPhotos(ctx context.Context, opts ...grpc.CallOption) (MatchService_UplaodPhotosClient, error)
 	SaveUserPrefrences(ctx context.Context, in *UserPrefrencesRequest, opts ...grpc.CallOption) (*MatchResponse, error)
-	GetUserByID(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*UserRepsonse, error)
-	GetUsersByGender(ctx context.Context, in *UserGenderRequest, opts ...grpc.CallOption) (*UserResponses, error)
 	GetMatchedUsers(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*MatchedUsersResponse, error)
 }
 
@@ -88,24 +84,6 @@ func (c *matchServiceClient) SaveUserPrefrences(ctx context.Context, in *UserPre
 	return out, nil
 }
 
-func (c *matchServiceClient) GetUserByID(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*UserRepsonse, error) {
-	out := new(UserRepsonse)
-	err := c.cc.Invoke(ctx, MatchService_GetUserByID_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *matchServiceClient) GetUsersByGender(ctx context.Context, in *UserGenderRequest, opts ...grpc.CallOption) (*UserResponses, error) {
-	out := new(UserResponses)
-	err := c.cc.Invoke(ctx, MatchService_GetUsersByGender_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *matchServiceClient) GetMatchedUsers(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*MatchedUsersResponse, error) {
 	out := new(MatchedUsersResponse)
 	err := c.cc.Invoke(ctx, MatchService_GetMatchedUsers_FullMethodName, in, out, opts...)
@@ -121,8 +99,6 @@ func (c *matchServiceClient) GetMatchedUsers(ctx context.Context, in *UserIDRequ
 type MatchServiceServer interface {
 	UplaodPhotos(MatchService_UplaodPhotosServer) error
 	SaveUserPrefrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error)
-	GetUserByID(context.Context, *UserIDRequest) (*UserRepsonse, error)
-	GetUsersByGender(context.Context, *UserGenderRequest) (*UserResponses, error)
 	GetMatchedUsers(context.Context, *UserIDRequest) (*MatchedUsersResponse, error)
 	mustEmbedUnimplementedMatchServiceServer()
 }
@@ -136,12 +112,6 @@ func (UnimplementedMatchServiceServer) UplaodPhotos(MatchService_UplaodPhotosSer
 }
 func (UnimplementedMatchServiceServer) SaveUserPrefrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveUserPrefrences not implemented")
-}
-func (UnimplementedMatchServiceServer) GetUserByID(context.Context, *UserIDRequest) (*UserRepsonse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserByID not implemented")
-}
-func (UnimplementedMatchServiceServer) GetUsersByGender(context.Context, *UserGenderRequest) (*UserResponses, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUsersByGender not implemented")
 }
 func (UnimplementedMatchServiceServer) GetMatchedUsers(context.Context, *UserIDRequest) (*MatchedUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMatchedUsers not implemented")
@@ -203,42 +173,6 @@ func _MatchService_SaveUserPrefrences_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MatchService_GetUserByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserIDRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MatchServiceServer).GetUserByID(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MatchService_GetUserByID_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MatchServiceServer).GetUserByID(ctx, req.(*UserIDRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MatchService_GetUsersByGender_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserGenderRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MatchServiceServer).GetUsersByGender(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MatchService_GetUsersByGender_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MatchServiceServer).GetUsersByGender(ctx, req.(*UserGenderRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _MatchService_GetMatchedUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserIDRequest)
 	if err := dec(in); err != nil {
@@ -267,14 +201,6 @@ var MatchService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SaveUserPrefrences",
 			Handler:    _MatchService_SaveUserPrefrences_Handler,
-		},
-		{
-			MethodName: "GetUserByID",
-			Handler:    _MatchService_GetUserByID_Handler,
-		},
-		{
-			MethodName: "GetUsersByGender",
-			Handler:    _MatchService_GetUsersByGender_Handler,
 		},
 		{
 			MethodName: "GetMatchedUsers",

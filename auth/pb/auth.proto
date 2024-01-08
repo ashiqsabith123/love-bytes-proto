@@ -14,6 +14,8 @@ service AuthService{
     rpc SendOtp(OtpReq)returns(Response){}
     rpc VerifyOtpAndAuth(VerifyOtpReq)returns(Response){}
     rpc SaveUserDetais(UserDetailsReq)returns(Response){}
+    rpc GetUserByID(UserIDRequest)returns(UserRepsonse){}
+    rpc GetUsersByGender(UserGenderRequest)returns(UserResponses){}
    
 }
 
@@ -33,6 +35,29 @@ message UserDetailsReq{
     string location =4;
     string dateofbirth =5;
     string gender =6;
+}
+
+message UserIDRequest{
+    int32 userID =1;
+}
+
+
+message UserRepsonse{
+    int32 userID =1;
+    string fullname =2;
+    string location =3;
+    string dob =4;
+    string lat =5;
+    string log =6;
+    string gender =7;
+}
+
+message UserResponses{
+    repeated UserRepsonse userRepsonses =1;
+}
+
+message UserGenderRequest{
+    string gender =1;
 }
 
 message Response {
