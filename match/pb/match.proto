@@ -7,7 +7,7 @@ option go_package = "./match/pb";
 service MatchService {
    rpc UplaodPhotos(stream PhotoRequest)returns(MatchResponse){}
    rpc SaveUserPrefrences(UserPrefrencesRequest)returns(MatchResponse){}
-   rpc GetMatchedUsers(UserIDRequest) returns(MatchedUsersResponse){}
+   rpc GetMatchedUsers(UserIdRequest) returns(MatchedUsersResponse){}
 }
 
 
@@ -31,7 +31,7 @@ message UserPrefrencesRequest{
    string loveLanguage =11;
 }
 
-message UserIDRequest{
+message UserIdRequest{
     int32 userID =1;
 }
 

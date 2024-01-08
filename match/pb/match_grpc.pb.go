@@ -30,7 +30,7 @@ const (
 type MatchServiceClient interface {
 	UplaodPhotos(ctx context.Context, opts ...grpc.CallOption) (MatchService_UplaodPhotosClient, error)
 	SaveUserPrefrences(ctx context.Context, in *UserPrefrencesRequest, opts ...grpc.CallOption) (*MatchResponse, error)
-	GetMatchedUsers(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*MatchedUsersResponse, error)
+	GetMatchedUsers(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*MatchedUsersResponse, error)
 }
 
 type matchServiceClient struct {
@@ -84,7 +84,7 @@ func (c *matchServiceClient) SaveUserPrefrences(ctx context.Context, in *UserPre
 	return out, nil
 }
 
-func (c *matchServiceClient) GetMatchedUsers(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*MatchedUsersResponse, error) {
+func (c *matchServiceClient) GetMatchedUsers(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*MatchedUsersResponse, error) {
 	out := new(MatchedUsersResponse)
 	err := c.cc.Invoke(ctx, MatchService_GetMatchedUsers_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -99,7 +99,7 @@ func (c *matchServiceClient) GetMatchedUsers(ctx context.Context, in *UserIDRequ
 type MatchServiceServer interface {
 	UplaodPhotos(MatchService_UplaodPhotosServer) error
 	SaveUserPrefrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error)
-	GetMatchedUsers(context.Context, *UserIDRequest) (*MatchedUsersResponse, error)
+	GetMatchedUsers(context.Context, *UserIdRequest) (*MatchedUsersResponse, error)
 	mustEmbedUnimplementedMatchServiceServer()
 }
 
@@ -113,7 +113,7 @@ func (UnimplementedMatchServiceServer) UplaodPhotos(MatchService_UplaodPhotosSer
 func (UnimplementedMatchServiceServer) SaveUserPrefrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveUserPrefrences not implemented")
 }
-func (UnimplementedMatchServiceServer) GetMatchedUsers(context.Context, *UserIDRequest) (*MatchedUsersResponse, error) {
+func (UnimplementedMatchServiceServer) GetMatchedUsers(context.Context, *UserIdRequest) (*MatchedUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMatchedUsers not implemented")
 }
 func (UnimplementedMatchServiceServer) mustEmbedUnimplementedMatchServiceServer() {}
@@ -174,7 +174,7 @@ func _MatchService_SaveUserPrefrences_Handler(srv interface{}, ctx context.Conte
 }
 
 func _MatchService_GetMatchedUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserIDRequest)
+	in := new(UserIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func _MatchService_GetMatchedUsers_Handler(srv interface{}, ctx context.Context,
 		FullMethod: MatchService_GetMatchedUsers_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MatchServiceServer).GetMatchedUsers(ctx, req.(*UserIDRequest))
+		return srv.(MatchServiceServer).GetMatchedUsers(ctx, req.(*UserIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
