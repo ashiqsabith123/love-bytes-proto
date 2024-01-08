@@ -35,8 +35,6 @@ message UserIdRequest{
     int32 userID =1;
 }
 
-
-
 message MatchedUsersResponse{
     repeated MatchedUsers matchedUsers =1;
 }
