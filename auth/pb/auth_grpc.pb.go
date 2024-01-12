@@ -34,7 +34,7 @@ type AuthServiceClient interface {
 	VerifyOtpAndAuth(ctx context.Context, in *VerifyOtpReq, opts ...grpc.CallOption) (*Response, error)
 	SaveUserDetais(ctx context.Context, in *UserDetailsReq, opts ...grpc.CallOption) (*Response, error)
 	GetUserByID(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*Response, error)
-	GetUsersByGender(ctx context.Context, in *UserGenderRequest, opts ...grpc.CallOption) (*UserResponses, error)
+	GetUsersByGender(ctx context.Context, in *UserGenderRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
 type authServiceClient struct {
@@ -81,8 +81,8 @@ func (c *authServiceClient) GetUserByID(ctx context.Context, in *UserIDRequest, 
 	return out, nil
 }
 
-func (c *authServiceClient) GetUsersByGender(ctx context.Context, in *UserGenderRequest, opts ...grpc.CallOption) (*UserResponses, error) {
-	out := new(UserResponses)
+func (c *authServiceClient) GetUsersByGender(ctx context.Context, in *UserGenderRequest, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, AuthService_GetUsersByGender_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -98,7 +98,7 @@ type AuthServiceServer interface {
 	VerifyOtpAndAuth(context.Context, *VerifyOtpReq) (*Response, error)
 	SaveUserDetais(context.Context, *UserDetailsReq) (*Response, error)
 	GetUserByID(context.Context, *UserIDRequest) (*Response, error)
-	GetUsersByGender(context.Context, *UserGenderRequest) (*UserResponses, error)
+	GetUsersByGender(context.Context, *UserGenderRequest) (*Response, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -118,7 +118,7 @@ func (UnimplementedAuthServiceServer) SaveUserDetais(context.Context, *UserDetai
 func (UnimplementedAuthServiceServer) GetUserByID(context.Context, *UserIDRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserByID not implemented")
 }
-func (UnimplementedAuthServiceServer) GetUsersByGender(context.Context, *UserGenderRequest) (*UserResponses, error) {
+func (UnimplementedAuthServiceServer) GetUsersByGender(context.Context, *UserGenderRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsersByGender not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}

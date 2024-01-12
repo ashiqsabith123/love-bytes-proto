@@ -15,7 +15,7 @@ service AuthService{
     rpc VerifyOtpAndAuth(VerifyOtpReq)returns(Response){}
     rpc SaveUserDetais(UserDetailsReq)returns(Response){}
     rpc GetUserByID(UserIDRequest)returns(Response){}
-    rpc GetUsersByGender(UserGenderRequest)returns(UserResponses){}
+    rpc GetUsersByGender(UserGenderRequest)returns(Response){}
    
 }
 
