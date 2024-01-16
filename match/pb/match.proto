@@ -42,7 +42,7 @@ message MatchedUsersResponse{
 message MatchedUsers{
     int32 userID =1;
     string name =2;
-    string age =3;
+    int32 age =3;
     string place =4;
     int32 matchScore =5;
     repeated Images userImages =6;
