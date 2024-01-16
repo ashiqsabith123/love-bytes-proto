@@ -41,10 +41,11 @@ message MatchedUsersResponse{
 
 message MatchedUsers{
     int32 userID =1;
-    string fullname =2;
+    string name =2;
     string age =3;
-    string location =4;
-    repeated Images userImages =5;
+    string place =4;
+    int32 matchScore =5;
+    repeated Images userImages =6;
 
 }
 
