@@ -7,7 +7,7 @@ option go_package = "./match/pb";
 service MatchService {
    rpc UplaodPhotos(stream PhotoRequest)returns(MatchResponse){}
    rpc SaveUserPrefrences(UserPrefrencesRequest)returns(MatchResponse){}
-   rpc GetMatchedUsers(UserIdRequest) returns(MatchedUsersResponse){}
+   rpc GetMatchedUsers(UserIdRequest) returns(MatchResponse){}
 }
 
 
