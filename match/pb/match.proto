@@ -8,6 +8,7 @@ service MatchService {
    rpc UplaodPhotos(stream PhotoRequest)returns(MatchResponse){}
    rpc SaveUserPrefrences(UserPrefrencesRequest)returns(MatchResponse){}
    rpc GetMatchedUsers(UserIdRequest) returns(MatchResponse){}
+   rpc CreateIntrests(IntrestRequest)returns(MatchResponse){}
 }
 
 
@@ -33,6 +34,11 @@ message UserPrefrencesRequest{
 
 message UserIdRequest{
     int32 userID =1;
+}
+
+message IntrestRequest{
+    uint32 senderID =1;
+    uint32 reciverID =2;
 }
 
 message MatchedUsersResponse{

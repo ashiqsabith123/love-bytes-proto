@@ -22,6 +22,7 @@ const (
 	MatchService_UplaodPhotos_FullMethodName       = "/MatchService/UplaodPhotos"
 	MatchService_SaveUserPrefrences_FullMethodName = "/MatchService/SaveUserPrefrences"
 	MatchService_GetMatchedUsers_FullMethodName    = "/MatchService/GetMatchedUsers"
+	MatchService_CreateIntrests_FullMethodName     = "/MatchService/CreateIntrests"
 )
 
 // MatchServiceClient is the client API for MatchService service.
@@ -31,6 +32,7 @@ type MatchServiceClient interface {
 	UplaodPhotos(ctx context.Context, opts ...grpc.CallOption) (MatchService_UplaodPhotosClient, error)
 	SaveUserPrefrences(ctx context.Context, in *UserPrefrencesRequest, opts ...grpc.CallOption) (*MatchResponse, error)
 	GetMatchedUsers(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*MatchResponse, error)
+	CreateIntrests(ctx context.Context, in *IntrestRequest, opts ...grpc.CallOption) (*MatchResponse, error)
 }
 
 type matchServiceClient struct {
@@ -93,6 +95,15 @@ func (c *matchServiceClient) GetMatchedUsers(ctx context.Context, in *UserIdRequ
 	return out, nil
 }
 
+func (c *matchServiceClient) CreateIntrests(ctx context.Context, in *IntrestRequest, opts ...grpc.CallOption) (*MatchResponse, error) {
+	out := new(MatchResponse)
+	err := c.cc.Invoke(ctx, MatchService_CreateIntrests_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MatchServiceServer is the server API for MatchService service.
 // All implementations must embed UnimplementedMatchServiceServer
 // for forward compatibility
@@ -100,6 +111,7 @@ type MatchServiceServer interface {
 	UplaodPhotos(MatchService_UplaodPhotosServer) error
 	SaveUserPrefrences(context.Context, *UserPrefrencesRequest) (*MatchResponse, error)
 	GetMatchedUsers(context.Context, *UserIdRequest) (*MatchResponse, error)
+	CreateIntrests(context.Context, *IntrestRequest) (*MatchResponse, error)
 	mustEmbedUnimplementedMatchServiceServer()
 }
 
@@ -115,6 +127,9 @@ func (UnimplementedMatchServiceServer) SaveUserPrefrences(context.Context, *User
 }
 func (UnimplementedMatchServiceServer) GetMatchedUsers(context.Context, *UserIdRequest) (*MatchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMatchedUsers not implemented")
+}
+func (UnimplementedMatchServiceServer) CreateIntrests(context.Context, *IntrestRequest) (*MatchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateIntrests not implemented")
 }
 func (UnimplementedMatchServiceServer) mustEmbedUnimplementedMatchServiceServer() {}
 
@@ -191,6 +206,24 @@ func _MatchService_GetMatchedUsers_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MatchService_CreateIntrests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IntrestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MatchServiceServer).CreateIntrests(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MatchService_CreateIntrests_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MatchServiceServer).CreateIntrests(ctx, req.(*IntrestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MatchService_ServiceDesc is the grpc.ServiceDesc for MatchService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -205,6 +238,10 @@ var MatchService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMatchedUsers",
 			Handler:    _MatchService_GetMatchedUsers_Handler,
+		},
+		{
+			MethodName: "CreateIntrests",
+			Handler:    _MatchService_CreateIntrests_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
