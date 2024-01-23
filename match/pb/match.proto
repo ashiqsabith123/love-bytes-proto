@@ -9,6 +9,7 @@ service MatchService {
    rpc SaveUserPrefrences(UserPrefrencesRequest)returns(MatchResponse){}
    rpc GetMatchedUsers(UserIdRequest) returns(MatchResponse){}
    rpc CreateIntrests(IntrestRequest)returns(MatchResponse){}
+   rpc GetAllInteretsRequests(UserIdRequest)returns(MatchResponse){}
 }
 
 
@@ -43,6 +44,13 @@ message IntrestRequest{
 
 message MatchedUsersResponse{
     repeated MatchedUsers matchedUsers =1;
+}
+
+message Interests{
+    uint32 userID =1;
+    string name=2;
+    string photo=3;
+    string time=4;
 }
 
 message MatchedUsers{
