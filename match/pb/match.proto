@@ -46,13 +46,6 @@ message MatchedUsersResponse{
     repeated MatchedUsers matchedUsers =1;
 }
 
-message Interests{
-    uint32 userID =1;
-    string name=2;
-    string photo=3;
-    string time=4;
-}
-
 message MatchedUsers{
     int32 userID =1;
     string name =2;
@@ -65,6 +58,17 @@ message MatchedUsers{
 
 message Images{
     string imageId=1;
+}
+
+message IntrestRequests {
+    repeated Interest intrestRequest =1;
+}
+
+message Interest{
+    uint32 userID =1;
+    string name=2;
+    string photo=3;
+    string time=4;
 }
 
 message MatchResponse {
