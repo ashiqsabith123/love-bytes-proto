@@ -11,11 +11,12 @@ service NotificationService{
 }
 
 message NotificationRequest{
-  uint32  userID =1;
-  string Name =2;
-  string image =3;
-  string type =4;
-  string status =5;
+  uint32  senderID =1;
+  uint32 receiverID =2;
+  string Name =3;
+  string image =4;
+  string type =5;
+  string status =6;
 
 }
 
