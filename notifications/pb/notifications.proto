@@ -22,6 +22,7 @@ message NotificationRequest{
 
 message NormalResponce{
     string message =1;
+    string err =2;
 }
 
 message NotificationResponce {
