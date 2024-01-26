@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+option go_package = "./notifications/pb";
+
+service NotificationService{
+
+}
+
+message NotificationResponce {
+    int32 code = 1;
+    string message = 2;
+    google.protobuf.Any error = 3; // Use google.protobuf.Any for interface{} in Go
+    google.protobuf.Any data = 4; // Use google.protobuf.Any for interface{} in Go
+}
+
+
+
