@@ -6,6 +6,21 @@ option go_package = "./notifications/pb";
 
 service NotificationService{
 
+    rpc CreateNotification(NotificationRequest)returns(NormalResponce){}
+
+}
+
+message NotificationRequest{
+  uint32  userID =1;
+  string Name =2;
+  string image =3;
+  string type =4;
+  string status =5;
+
+}
+
+message NormalResponce{
+    string message =1;
 }
 
 message NotificationResponce {
