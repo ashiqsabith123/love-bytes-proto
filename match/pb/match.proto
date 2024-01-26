@@ -39,7 +39,7 @@ message UserIdRequest{
 
 message IntrestRequest{
     uint32 senderID =1;
-    uint32 reciverID =2;
+    uint32 receiverID =2;
 }
 
 message MatchedUsersResponse{
