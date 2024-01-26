@@ -65,11 +65,12 @@ message IntrestRequests {
 }
 
 message Interest{
-    uint32 userID =1;
-    string name=2;
-    string photo=3;
-    string time=4;
-    string status =5;
+    uint32 ID =1;
+    uint32 userID =2;
+    string name=3;
+    string photo=4;
+    string time=5;
+    string status =6;
 }
 
 message MatchResponse {
