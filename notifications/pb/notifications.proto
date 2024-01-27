@@ -6,11 +6,12 @@ option go_package = "./notifications/pb";
 
 service NotificationService{
 
-    rpc CreateNotification(NotificationRequest)returns(NormalResponce){}
+    rpc CreateNotification(Notification)returns(NormalResponce){}
+    rpc GetAllNotifiacation(GetNotificationRequest)returns(NotificationResponce){}
 
 }
 
-message NotificationRequest{
+message Notification{
   uint32  senderID =1;
   uint32 receiverID =2;
   string Name =3;
@@ -18,6 +19,16 @@ message NotificationRequest{
   string type =5;
   string status =6;
 
+}
+
+message GetNotificationRequest{
+    uint32 userID =1 ;
+    string day =2;
+    string type =3;
+}
+
+message AllNotifications{
+    repeated Notification allnotification = 1;
 }
 
 message NormalResponce{
