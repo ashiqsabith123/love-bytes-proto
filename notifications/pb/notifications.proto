@@ -19,8 +19,11 @@ uint32 commonID =1;
   string image =5;
   string type =6;
   string status =7;
+  string time=8;
 
 }
+
+
 
 message GetNotificationRequest{
     uint32 userID =1 ;
