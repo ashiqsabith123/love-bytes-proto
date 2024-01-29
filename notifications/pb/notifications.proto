@@ -12,12 +12,13 @@ service NotificationService{
 }
 
 message Notification{
-  uint32  senderID =1;
-  uint32 receiverID =2;
-  string Name =3;
-  string image =4;
-  string type =5;
-  string status =6;
+uint32 commonID =1;
+  uint32  senderID =2;
+  uint32 receiverID =3;
+  string Name =4;
+  string image =5;
+  string type =6;
+  string status =7;
 
 }
 
