@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MatchService_UplaodPhotos_FullMethodName           = "/MatchService/UplaodPhotos"
-	MatchService_SaveUserPrefrences_FullMethodName     = "/MatchService/SaveUserPrefrences"
-	MatchService_GetMatchedUsers_FullMethodName        = "/MatchService/GetMatchedUsers"
-	MatchService_CreateIntrests_FullMethodName         = "/MatchService/CreateIntrests"
-	MatchService_GetAllInteretsRequests_FullMethodName = "/MatchService/GetAllInteretsRequests"
+	MatchService_UplaodPhotos_FullMethodName                = "/MatchService/UplaodPhotos"
+	MatchService_SaveUserPrefrences_FullMethodName          = "/MatchService/SaveUserPrefrences"
+	MatchService_GetMatchedUsers_FullMethodName             = "/MatchService/GetMatchedUsers"
+	MatchService_CreateIntrests_FullMethodName              = "/MatchService/CreateIntrests"
+	MatchService_GetAllInteretsRequests_FullMethodName      = "/MatchService/GetAllInteretsRequests"
+	MatchService_ChangeInterestRequestStatus_FullMethodName = "/MatchService/ChangeInterestRequestStatus"
 )
 
 // MatchServiceClient is the client API for MatchService service.
@@ -35,6 +36,7 @@ type MatchServiceClient interface {
 	GetMatchedUsers(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*MatchResponse, error)
 	CreateIntrests(ctx context.Context, in *IntrestRequest, opts ...grpc.CallOption) (*MatchResponse, error)
 	GetAllInteretsRequests(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*MatchResponse, error)
+	ChangeInterestRequestStatus(ctx context.Context, in *ChangeInterestRequest, opts ...grpc.CallOption) (*MatchResponse, error)
 }
 
 type matchServiceClient struct {
@@ -115,6 +117,15 @@ func (c *matchServiceClient) GetAllInteretsRequests(ctx context.Context, in *Use
 	return out, nil
 }
 
+func (c *matchServiceClient) ChangeInterestRequestStatus(ctx context.Context, in *ChangeInterestRequest, opts ...grpc.CallOption) (*MatchResponse, error) {
+	out := new(MatchResponse)
+	err := c.cc.Invoke(ctx, MatchService_ChangeInterestRequestStatus_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MatchServiceServer is the server API for MatchService service.
 // All implementations must embed UnimplementedMatchServiceServer
 // for forward compatibility
@@ -124,6 +135,7 @@ type MatchServiceServer interface {
 	GetMatchedUsers(context.Context, *UserIdRequest) (*MatchResponse, error)
 	CreateIntrests(context.Context, *IntrestRequest) (*MatchResponse, error)
 	GetAllInteretsRequests(context.Context, *UserIdRequest) (*MatchResponse, error)
+	ChangeInterestRequestStatus(context.Context, *ChangeInterestRequest) (*MatchResponse, error)
 	mustEmbedUnimplementedMatchServiceServer()
 }
 
@@ -145,6 +157,9 @@ func (UnimplementedMatchServiceServer) CreateIntrests(context.Context, *IntrestR
 }
 func (UnimplementedMatchServiceServer) GetAllInteretsRequests(context.Context, *UserIdRequest) (*MatchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllInteretsRequests not implemented")
+}
+func (UnimplementedMatchServiceServer) ChangeInterestRequestStatus(context.Context, *ChangeInterestRequest) (*MatchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeInterestRequestStatus not implemented")
 }
 func (UnimplementedMatchServiceServer) mustEmbedUnimplementedMatchServiceServer() {}
 
@@ -257,6 +272,24 @@ func _MatchService_GetAllInteretsRequests_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MatchService_ChangeInterestRequestStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeInterestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MatchServiceServer).ChangeInterestRequestStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MatchService_ChangeInterestRequestStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MatchServiceServer).ChangeInterestRequestStatus(ctx, req.(*ChangeInterestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MatchService_ServiceDesc is the grpc.ServiceDesc for MatchService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -279,6 +312,10 @@ var MatchService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllInteretsRequests",
 			Handler:    _MatchService_GetAllInteretsRequests_Handler,
+		},
+		{
+			MethodName: "ChangeInterestRequestStatus",
+			Handler:    _MatchService_ChangeInterestRequestStatus_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

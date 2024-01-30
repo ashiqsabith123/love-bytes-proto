@@ -10,6 +10,7 @@ service MatchService {
    rpc GetMatchedUsers(UserIdRequest) returns(MatchResponse){}
    rpc CreateIntrests(IntrestRequest)returns(MatchResponse){}
    rpc GetAllInteretsRequests(UserIdRequest)returns(MatchResponse){}
+   rpc ChangeInterestRequestStatus(ChangeInterestRequest)returns(MatchResponse){}
 }
 
 
@@ -17,6 +18,11 @@ message PhotoRequest{
     int32 userID =1;
     bytes imageData =2;
     bool lastChunk =3;
+}
+
+message ChangeInterestRequest{
+    uint32 id =1;
+    string status =2;
 }
 
 message UserPrefrencesRequest{
