@@ -30,7 +30,7 @@ const (
 type NotificationServiceClient interface {
 	CreateNotification(ctx context.Context, in *Notification, opts ...grpc.CallOption) (*NormalResponce, error)
 	GetAllNotifiacation(ctx context.Context, in *GetNotificationRequest, opts ...grpc.CallOption) (*NotificationResponce, error)
-	SaveFCMTokens(ctx context.Context, in *FCMTokenRequest, opts ...grpc.CallOption) (*NormalResponce, error)
+	SaveFCMTokens(ctx context.Context, in *FCMTokenRequest, opts ...grpc.CallOption) (*NotificationResponce, error)
 }
 
 type notificationServiceClient struct {
@@ -59,8 +59,8 @@ func (c *notificationServiceClient) GetAllNotifiacation(ctx context.Context, in 
 	return out, nil
 }
 
-func (c *notificationServiceClient) SaveFCMTokens(ctx context.Context, in *FCMTokenRequest, opts ...grpc.CallOption) (*NormalResponce, error) {
-	out := new(NormalResponce)
+func (c *notificationServiceClient) SaveFCMTokens(ctx context.Context, in *FCMTokenRequest, opts ...grpc.CallOption) (*NotificationResponce, error) {
+	out := new(NotificationResponce)
 	err := c.cc.Invoke(ctx, NotificationService_SaveFCMTokens_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (c *notificationServiceClient) SaveFCMTokens(ctx context.Context, in *FCMTo
 type NotificationServiceServer interface {
 	CreateNotification(context.Context, *Notification) (*NormalResponce, error)
 	GetAllNotifiacation(context.Context, *GetNotificationRequest) (*NotificationResponce, error)
-	SaveFCMTokens(context.Context, *FCMTokenRequest) (*NormalResponce, error)
+	SaveFCMTokens(context.Context, *FCMTokenRequest) (*NotificationResponce, error)
 	mustEmbedUnimplementedNotificationServiceServer()
 }
 
@@ -88,7 +88,7 @@ func (UnimplementedNotificationServiceServer) CreateNotification(context.Context
 func (UnimplementedNotificationServiceServer) GetAllNotifiacation(context.Context, *GetNotificationRequest) (*NotificationResponce, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllNotifiacation not implemented")
 }
-func (UnimplementedNotificationServiceServer) SaveFCMTokens(context.Context, *FCMTokenRequest) (*NormalResponce, error) {
+func (UnimplementedNotificationServiceServer) SaveFCMTokens(context.Context, *FCMTokenRequest) (*NotificationResponce, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveFCMTokens not implemented")
 }
 func (UnimplementedNotificationServiceServer) mustEmbedUnimplementedNotificationServiceServer() {}

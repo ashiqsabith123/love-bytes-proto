@@ -8,7 +8,7 @@ service NotificationService{
 
     rpc CreateNotification(Notification)returns(NormalResponce){}
     rpc GetAllNotifiacation(GetNotificationRequest)returns(NotificationResponce){}
-    rpc SaveFCMTokens(FCMTokenRequest)returns(NormalResponce){}
+    rpc SaveFCMTokens(FCMTokenRequest)returns(NotificationResponce){}
 
 }
 
