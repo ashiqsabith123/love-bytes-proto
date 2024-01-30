@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	NotificationService_CreateNotification_FullMethodName  = "/NotificationService/CreateNotification"
 	NotificationService_GetAllNotifiacation_FullMethodName = "/NotificationService/GetAllNotifiacation"
+	NotificationService_SaveFCMTokens_FullMethodName       = "/NotificationService/SaveFCMTokens"
 )
 
 // NotificationServiceClient is the client API for NotificationService service.
@@ -29,6 +30,7 @@ const (
 type NotificationServiceClient interface {
 	CreateNotification(ctx context.Context, in *Notification, opts ...grpc.CallOption) (*NormalResponce, error)
 	GetAllNotifiacation(ctx context.Context, in *GetNotificationRequest, opts ...grpc.CallOption) (*NotificationResponce, error)
+	SaveFCMTokens(ctx context.Context, in *FCMTokenRequest, opts ...grpc.CallOption) (*NormalResponce, error)
 }
 
 type notificationServiceClient struct {
@@ -57,12 +59,22 @@ func (c *notificationServiceClient) GetAllNotifiacation(ctx context.Context, in 
 	return out, nil
 }
 
+func (c *notificationServiceClient) SaveFCMTokens(ctx context.Context, in *FCMTokenRequest, opts ...grpc.CallOption) (*NormalResponce, error) {
+	out := new(NormalResponce)
+	err := c.cc.Invoke(ctx, NotificationService_SaveFCMTokens_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NotificationServiceServer is the server API for NotificationService service.
 // All implementations must embed UnimplementedNotificationServiceServer
 // for forward compatibility
 type NotificationServiceServer interface {
 	CreateNotification(context.Context, *Notification) (*NormalResponce, error)
 	GetAllNotifiacation(context.Context, *GetNotificationRequest) (*NotificationResponce, error)
+	SaveFCMTokens(context.Context, *FCMTokenRequest) (*NormalResponce, error)
 	mustEmbedUnimplementedNotificationServiceServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedNotificationServiceServer) CreateNotification(context.Context
 }
 func (UnimplementedNotificationServiceServer) GetAllNotifiacation(context.Context, *GetNotificationRequest) (*NotificationResponce, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllNotifiacation not implemented")
+}
+func (UnimplementedNotificationServiceServer) SaveFCMTokens(context.Context, *FCMTokenRequest) (*NormalResponce, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveFCMTokens not implemented")
 }
 func (UnimplementedNotificationServiceServer) mustEmbedUnimplementedNotificationServiceServer() {}
 
@@ -125,6 +140,24 @@ func _NotificationService_GetAllNotifiacation_Handler(srv interface{}, ctx conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NotificationService_SaveFCMTokens_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FCMTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NotificationServiceServer).SaveFCMTokens(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NotificationService_SaveFCMTokens_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NotificationServiceServer).SaveFCMTokens(ctx, req.(*FCMTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NotificationService_ServiceDesc is the grpc.ServiceDesc for NotificationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +172,10 @@ var NotificationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllNotifiacation",
 			Handler:    _NotificationService_GetAllNotifiacation_Handler,
+		},
+		{
+			MethodName: "SaveFCMTokens",
+			Handler:    _NotificationService_SaveFCMTokens_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

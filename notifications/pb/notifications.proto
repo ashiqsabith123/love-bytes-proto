@@ -8,6 +8,7 @@ service NotificationService{
 
     rpc CreateNotification(Notification)returns(NormalResponce){}
     rpc GetAllNotifiacation(GetNotificationRequest)returns(NotificationResponce){}
+    rpc SaveFCMTokens(FCMTokenRequest)returns(NormalResponce){}
 
 }
 
@@ -38,6 +39,11 @@ message AllNotifications{
 message NormalResponce{
     string message =1;
     string err =2;
+}
+
+message FCMTokenRequest{
+    uint32 userID =1;
+    string token =2;
 }
 
 message NotificationResponce {
