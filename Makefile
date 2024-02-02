@@ -6,3 +6,6 @@ genmatch:
 
 gennotfi:
 	protoc --go_out=. --go-grpc_out=. --proto_path=./notifications/pb notifications.proto
+
+genchat:
+	protoc --go_out=. --go-grpc_out=. --proto_path=./chat/pb chat.proto
