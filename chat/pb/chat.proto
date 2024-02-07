@@ -8,6 +8,13 @@ option go_package = "./chat/pb";
 
 service ChatService{
 
+    rpc CreateChatRoom(ChatRoomRequest)returns(ChatResponse){}
+
+}
+
+message ChatRoomRequest{
+    uint32 userID1 = 1;
+    uint32 userID2 = 2;
 }
 
 
