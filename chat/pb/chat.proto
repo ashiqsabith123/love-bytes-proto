@@ -9,7 +9,12 @@ option go_package = "./chat/pb";
 service ChatService{
 
     rpc CreateChatRoom(ChatRoomRequest)returns(ChatResponse){}
+    rpc GetChatRooms(UserIdRequest)returns(stream ChatResponse){}
 
+
+}
+message UserIdRequest {
+    uint32 userID = 1;
 }
 
 message ChatRoomRequest{

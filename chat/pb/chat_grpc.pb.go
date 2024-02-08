@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	ChatService_CreateChatRoom_FullMethodName = "/ChatService/CreateChatRoom"
+	ChatService_GetChatRooms_FullMethodName   = "/ChatService/GetChatRooms"
 )
 
 // ChatServiceClient is the client API for ChatService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatServiceClient interface {
 	CreateChatRoom(ctx context.Context, in *ChatRoomRequest, opts ...grpc.CallOption) (*ChatResponse, error)
+	GetChatRooms(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (ChatService_GetChatRoomsClient, error)
 }
 
 type chatServiceClient struct {
@@ -46,11 +48,44 @@ func (c *chatServiceClient) CreateChatRoom(ctx context.Context, in *ChatRoomRequ
 	return out, nil
 }
 
+func (c *chatServiceClient) GetChatRooms(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (ChatService_GetChatRoomsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &ChatService_ServiceDesc.Streams[0], ChatService_GetChatRooms_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &chatServiceGetChatRoomsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type ChatService_GetChatRoomsClient interface {
+	Recv() (*ChatResponse, error)
+	grpc.ClientStream
+}
+
+type chatServiceGetChatRoomsClient struct {
+	grpc.ClientStream
+}
+
+func (x *chatServiceGetChatRoomsClient) Recv() (*ChatResponse, error) {
+	m := new(ChatResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // ChatServiceServer is the server API for ChatService service.
 // All implementations must embed UnimplementedChatServiceServer
 // for forward compatibility
 type ChatServiceServer interface {
 	CreateChatRoom(context.Context, *ChatRoomRequest) (*ChatResponse, error)
+	GetChatRooms(*UserIdRequest, ChatService_GetChatRoomsServer) error
 	mustEmbedUnimplementedChatServiceServer()
 }
 
@@ -60,6 +95,9 @@ type UnimplementedChatServiceServer struct {
 
 func (UnimplementedChatServiceServer) CreateChatRoom(context.Context, *ChatRoomRequest) (*ChatResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateChatRoom not implemented")
+}
+func (UnimplementedChatServiceServer) GetChatRooms(*UserIdRequest, ChatService_GetChatRoomsServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetChatRooms not implemented")
 }
 func (UnimplementedChatServiceServer) mustEmbedUnimplementedChatServiceServer() {}
 
@@ -92,6 +130,27 @@ func _ChatService_CreateChatRoom_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ChatService_GetChatRooms_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(UserIdRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(ChatServiceServer).GetChatRooms(m, &chatServiceGetChatRoomsServer{stream})
+}
+
+type ChatService_GetChatRoomsServer interface {
+	Send(*ChatResponse) error
+	grpc.ServerStream
+}
+
+type chatServiceGetChatRoomsServer struct {
+	grpc.ServerStream
+}
+
+func (x *chatServiceGetChatRoomsServer) Send(m *ChatResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // ChatService_ServiceDesc is the grpc.ServiceDesc for ChatService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -104,6 +163,12 @@ var ChatService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ChatService_CreateChatRoom_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetChatRooms",
+			Handler:       _ChatService_GetChatRooms_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "chat.proto",
 }
