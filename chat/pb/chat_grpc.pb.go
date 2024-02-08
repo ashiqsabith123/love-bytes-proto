@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatServiceClient interface {
 	CreateChatRoom(ctx context.Context, in *ChatRoomRequest, opts ...grpc.CallOption) (*ChatResponse, error)
-	GetChatRooms(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (ChatService_GetChatRoomsClient, error)
+	GetChatRooms(ctx context.Context, in *ChatUserIdRequest, opts ...grpc.CallOption) (ChatService_GetChatRoomsClient, error)
 }
 
 type chatServiceClient struct {
@@ -48,7 +48,7 @@ func (c *chatServiceClient) CreateChatRoom(ctx context.Context, in *ChatRoomRequ
 	return out, nil
 }
 
-func (c *chatServiceClient) GetChatRooms(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (ChatService_GetChatRoomsClient, error) {
+func (c *chatServiceClient) GetChatRooms(ctx context.Context, in *ChatUserIdRequest, opts ...grpc.CallOption) (ChatService_GetChatRoomsClient, error) {
 	stream, err := c.cc.NewStream(ctx, &ChatService_ServiceDesc.Streams[0], ChatService_GetChatRooms_FullMethodName, opts...)
 	if err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (x *chatServiceGetChatRoomsClient) Recv() (*ChatResponse, error) {
 // for forward compatibility
 type ChatServiceServer interface {
 	CreateChatRoom(context.Context, *ChatRoomRequest) (*ChatResponse, error)
-	GetChatRooms(*UserIdRequest, ChatService_GetChatRoomsServer) error
+	GetChatRooms(*ChatUserIdRequest, ChatService_GetChatRoomsServer) error
 	mustEmbedUnimplementedChatServiceServer()
 }
 
@@ -96,7 +96,7 @@ type UnimplementedChatServiceServer struct {
 func (UnimplementedChatServiceServer) CreateChatRoom(context.Context, *ChatRoomRequest) (*ChatResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateChatRoom not implemented")
 }
-func (UnimplementedChatServiceServer) GetChatRooms(*UserIdRequest, ChatService_GetChatRoomsServer) error {
+func (UnimplementedChatServiceServer) GetChatRooms(*ChatUserIdRequest, ChatService_GetChatRoomsServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetChatRooms not implemented")
 }
 func (UnimplementedChatServiceServer) mustEmbedUnimplementedChatServiceServer() {}
@@ -131,7 +131,7 @@ func _ChatService_CreateChatRoom_Handler(srv interface{}, ctx context.Context, d
 }
 
 func _ChatService_GetChatRooms_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(UserIdRequest)
+	m := new(ChatUserIdRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
