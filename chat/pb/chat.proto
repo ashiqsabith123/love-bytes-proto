@@ -22,6 +22,18 @@ message ChatRoomRequest{
     uint32 userID2 = 2;
 }
 
+message ChatRooms {
+    repeated ChatRoom chatRooms =1;
+}
+
+message ChatRoom{
+    string ID=1;
+    uint32 userID1 =2;
+    uint32 userID2=3;
+    string lastMessage =4;
+    string lastMessageTime =5;
+}
+
 
 message ChatResponse {
     int32 code = 1;
